@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CDistiller 5E</title>
+    <link href="https://fonts.googleapis.com/css?family=Kaushan+Script|Work+Sans:100,400" rel="stylesheet">
+    <link rel="stylesheet" href="style/reset.css" type="text/css">
+    <link rel="stylesheet" href="style/dnd5e.css" type="text/css">
+    <script type="text/javascript" src='scripts/jquery.extend.js'></script>
+    <script src="scripts/vue.js"></script>
+    <script src="scripts/vue-router.js"></script>
+  </head>
+  <body>
+    <div id='app'>
+      <router-view></router-view>
+    </div>
+    
+    <script>
+      const theParties = {
+        1: [1, 2, 3, 4],
+      };
+      const theCharacters = {
+        1: {
+          // banner
+          name: "Mira Dragomir",
+          gender: '♀',
+          level: 3,
+          class: 'Bard',
+          subclass: 'of Lore',
+          background: 'Spy',
+          race: 'Half Elf',
+          alignment: 'Chaotic Good',
+          player: 'Seth',
+          
+          portraitUrl: 'portraits/fiddler.png',
+          
+          // hud
+          ac: [11, 'dex|attributeBonus', {expr: 1, source: 'Pin of protection'}],
+          speed: "30'",
+          hitPoints: [8, {expr: 'con', filters: 'attributeBonus', times: 'level'}, 'level|-1|x5'],
+          hitDiceSize: 8,
+          spellStat: 'CHA',
+          spellDC: [8, 'proficiencies.bonus', 'cha|attributeBonus'],
+          
+          // attributes
+          str: 8,
+          dex: 15,
+          con: 10,
+          int: 12,
+          wis: 14,
+          cha: 17,
+          
+          ////// story
+          traits: "Always calm, no matter the situation. I never raise my voice ar let my emotions control me",
+          ideals: "Chains are meant to be broken, as are those who would forge them ",
+          bonds: "Someone I loved died because of I mistake I made; that will never happen again.",
+          flaws: "I'm a sucker for a pretty face.",
+          
+          // proficiencies
+          proficiencies: {
+            defaultSkillBonus: ['proficiencies.bonus|x0.5'],
+            savingThrows: ['dex', 'cha'],
+            skills: ['Acrobatics', 'Sleight of hand', 'Stealth', 'History', 'Investigation', 'Insight', 'Perception', 'Deception', 'Performance', 'Persuasion'],
+            expertise: ['Deception', 'Persuasion'],
+            languages: ['Common', 'Elvish', 'Sylvan'],
+            other: ['Light armor', 'Simple weapons', 'Hand crossbows', 'Longswords', 'Rapiers', 'Shortswords', 'Fiddles', 'Pipe organs', 'Harpsichords'],
+          },
+          
+          features: [
+            {name: 'Vicious mockery', source: 'cantrip', page: 'PH285',
+              refreshes: 'turn',
+              save: 'WIS',
+              desc: "…or take 1d4 damage and have disadvantage on next attack"},
+            {name: 'Minor illusion', source: 'cantrip', page: 'PH260',
+              refreshes: 'turn',
+              desc: "Image or sound, not both. Action and INT save shows it to be an illusion"},
+            {name: 'Rapier', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['dex|attributeBonus', 'proficiencies.bonus'],
+              desc: "1d8+DEX P"},
+            
+            {name: 'Bardic inspiration',
+              uses: ['cha|attributeBonus|min1'],
+              refreshes: 'long rest',
+              desc: 'Bonus action: give a d6. Holder can add it to an attack, ability, or saving roll, after initial roll.',
+              page: 'PH91', source: 'class'},
+            {name: 'Bard spells',
+              usesList: [
+                {label: 1, uses: 4, refreshes: 'long rest'},
+                {label: 2, uses: 2, refreshes: 'long rest'},
+              ],
+              refreshes: 'long rest',
+              page: 'PH91', source: 'class'},
+            
+            // Spell list
+            // 
+            // Animal Friendship (1; PH212) charm 1 (+1/lvl); max INT 4
+            // Animal Messenger (2; PH212) send message
+            // Bane (1; PH216) 3 targets: -1d4 to hit or save
+            // Blade Ward (c; PH218) 1 round resistance for me
+            // Blindness/Deafness (2; PHx) until CON save
+            // Calm Emotions (2; PH221) no frightening OR don't attack us
+            // 🚫 Charm Person (1; PH221) WIS save or charmed, but it knows
+            // Cloud of Daggers (2; PH222) 4d4 area
+            // Comprehend Languages (1; PH224) hear or read (w touch)
+            // Crown of Madness (2; PH229) attack for me (eats my actions)
+            // ✴️ Cure Wounds (1; PH230) touch heal Sd8
+            // Dancing Lights (c; PH230) light
+            // Detect Magic (1; PH231) see magic auras for 10m
+            // Detect Thoughts (2; PH231) surface free, deep: INT & aware
+            // Disguise Self (1; PH233) illusionary
+            // Dissonant Whispers (1; PH234) damage & flee
+            // Enhance Ability (2; PH237) give adv on ability checks
+            // Enthrall (2; PH238) "look at me!"
+            // Faerie Fire (1; PH239) adv to hit lit peeps
+            // Feather Fall (1; PH239) don't die
+            // 🚫 Friends (c; PH244) adv on CHA, but then they know
+            // Healing Word (1; PH250) ranged heal 1d10
+            // Heat Metal (2; PH250) continuing damage via metal
+            // Heroism (1; PH250) no fear; temp hp per turn
+            // Hold Person (2; PH251) WIS or paralyzed
+            // Identify (1; PH252) what magic does this have?
+            // Illusory Script (1; PH252) write so only those I want can read
+            // Invisibility (2; PH254) make 1 (+1/lvl) invis
+            // Knock (2; PH254) open stuff
+            // Lesser Restoration (2; PH255) end condition or disease
+            // Light (c; PH255) make light
+            // Locate Animais or Plants (2; PHx) yep
+            // Locate Object (2; PHx) yep
+            // Longstrider (1; PHx) +10' movement
+            // Mage Hand (c; PHx) hand does your bidding
+            // Magic Mouth (2; PHx) mouth says your message
+            // Mending (c; PH259) fix a hole
+            // Message (c; PH259) TP, close up
+            // Minor IlIusion (c; PH260) sound or image, INT reveals
+            // Phantasmal Force (2; PH264) realistic, for 1 target
+            // Prestidigitation (c; PH267) light show
+            // See Invisibility (2; PHx) 
+            // Shatter (2; PHx) 3d8 thunder dmg
+            // Silence (2; PHx) quiet
+            // Silent Image (1; PH276) sight not sound
+            // Sleep (1; PH276) group zzz, lowest HP first
+            // Speak with Animais (1; PHx) 
+            // Suggestion (2; PHx) 
+            // Tasha's Hideous Laughter (1; PHx) incapacitate until WIS
+            // Thunderwave (1; PHx) CON or 2d8+push
+            // True Strike (c; PHx) adv on next attack
+            // Unseen Servant (1; PHx) 
+            // Vicious Mockery (c; PHx) 
+            // 🚫 Zone of Truth (2; PHx) they know, I know
+            {name: 'Disguise self',
+              refreshes: 'long rest',
+              desc: "Action and INT save reveal it's an illusion",
+              level: 1, page: 'PH233', source: 'class'},
+            {name: 'Comprehend languages',
+              refreshes: 'long rest',
+              desc: "For 1 hour, anything I hear or read (and can touch). No decoding.",
+              level: 1, page: 'PH224', source: 'class'},
+            {name: 'Cure wounds',
+              refreshes: 'long rest',
+              desc: "Touch; Heal 1d8+CHA (+1d8/level)",
+              level: 1, page: 'PH230', source: 'class'},
+            {name: 'Heroism',
+              refreshes: 'long rest',
+              desc: "1 (+1/level) target. Immune to frightening; CHA temp HP at start of each turn",
+              level: 1, page: 'PH250', source: 'class'},
+            {name: 'Dissonant whispers',
+              refreshes: 'long rest',
+              save: 'WIS',
+              desc: "…or 3d6 (+1d6/level) psychic damage and use reaction to flee. Half dmg on save",
+              level: 1, page: 'PH234', source: 'class'},
+            {name: 'Suggestion',
+              refreshes: 'long rest',
+              save: 'WIS',
+              desc: "…or follow one reasonable-sounding command",
+              level: 2, page: 'PH279', source: 'class'},
+            
+            {name: 'Cutting words',
+              desc: "↩︎ Reaction: spend inspiration to deduct from an attack, ability, or damage roll",
+              page: 'PH54', source: 'class'},
+            {name: 'Song of rest',
+              desc: "If you use hit dice in a short rest, heal 1d6 extra",
+              page: 'PH53', source: 'class'},
+              
+            {name: 'Darkvision',
+              desc: "See 60' in dim light as bright light; in darkness as dim light. No color; only shades of gray.",
+              page: 'PH23', source: 'race'},
+            {name: 'Fey Ancestry',
+              desc: "Advantage against being charmed; magic can't put you to sleep.",
+              page: 'PH23', source: 'race'},
+            
+            {name: 'Underground contact',
+              desc: "Reliable and trustworthy; liaison to network. Can get messages to & from over great distances",
+              page: 'PH129', source: 'background'},
+          ],
+          
+          // stuff
+          equipment: [
+            'Leather armor',
+            'Fiddle',
+            "Diplomat's pack",
+            'Dagger',
+            'Bone knife',
+            'Crowbar',
+            'Pin of protection',
+          ],
+          wealth: [
+            {name: "GP", count: 65},
+          ],
+        },
+        2: {
+          // banner
+          name: "Nefaris",
+          gender: '♀',
+          level: 3,
+          class: 'Fighter',
+          subclass: 'Battle Master',
+          background: 'Outlander',
+          race: 'Tiefling',
+          alignment: 'Chaotic Neutral',
+          player: 'Sam',
+          
+          portraitUrl: 'portraits/come-get-some.jpg',
+          
+          // hud
+          ac: [14, 'dex|attributeBonus'],
+          speed: "30'",
+          hitPoints: [8, {expr: 'con', filters: 'attributeBonus', times: 'level'}, 8, 8],
+          deathSaveSuccesses: 0,
+          deathSaveFailures: 0,
+          hitDiceSize: 10,
+          maneuverDC: [8, 'proficiencies.bonus', 'str|attributeBonus'],
+          
+          // attributes
+          str: 15,
+          dex: 13,
+          con: 14,
+          int: 11,
+          wis: 12,
+          cha: 10,
+          
+          // story
+          traits: "I place no stock in wealthy or well-mannered folk. Money and manners won't save you from a hungry owlbear.",
+          ideals: "Life is like the seasons, in constant change, and we must change with it.",
+          bonds: "I am the last of my tribe, and it's up to me to ensure their names enter legend.",
+          flaws: "Violence is my answer to almost any challenge.",
+          
+          // proficiencies
+          proficiencies: {
+            savingThrows: ['str', 'con'],
+            skills: ['Acrobatics', 'Athletics', 'Intimidation', 'Survival'],
+            languages: ['Common', 'Infernal', 'Celestial'],
+            other: ['Simple melee weapons', 'Martial weapons', 'All armor', 'Shields', 'Flute', "Brewer's tools"],
+          },
+          
+          features: [
+            {name: 'Ragnarok', subname: 'Longsword', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['str|attributeBonus', 'proficiencies.bonus'],
+              desc: '1d8+2 S; versatile 1d10+2'},
+            {name: 'Kai & Kibito', subname: 'Rapiers', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['str|attributeBonus', 'proficiencies.bonus'],
+              desc: '1d8+2 P; finesse'},
+            {name: 'Kaa', subname: 'Staff', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['str|attributeBonus', 'proficiencies.bonus'],
+              desc: '1d6+2 B; versatile 1d8+2 B'},
+            {name: 'Dabura', subname: 'Silvered shortsword', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['str|attributeBonus', 'proficiencies.bonus'],
+              desc: '1d6+2 P; flexible'},
+            {name: 'Wood & Chip', subname: 'Handaxes', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['str|attributeBonus', 'proficiencies.bonus'],
+              desc: '1d6+2 S; range 20/60'},
+            {name: 'Superiority Dice', page: 'PH73', source: 'archetype',
+              uses: 4,
+              refreshes: 'short rest',
+              desc: 'd8s. A superiority die is expended when you use it.'},
+            {name: 'Second wind', page: 'PH72', source: 'class',
+              uses: 1,
+              refreshes: 'short rest',
+              desc: 'Use a bonus action to regain hit points equal to 1d10 + your fighter level.'},
+            {name: 'Action Surge', page: 'PH72', source: 'class',
+              uses: 1,
+              refreshes: 'short rest',
+              desc: 'Take one additional action on top of your regular action and any bonus action.'},
+            {name: 'Trip attack',
+              refreshes: 'short rest',
+              desc: "When you hit, roll superiority and add to damage. If target is Large or smaller, it is knocked prone unless it saves with Strength.",
+              page: 'PH74', source: 'class'},
+            {name: 'Parry',
+              refreshes: 'short rest',
+              desc: "When damaged with a melee attack, use your reaction and roll superiority to reduce damage by superiority die + DEX",
+              page: 'PH74', source: 'class'},
+            {name: 'Feinting attack',
+              refreshes: 'short rest',
+              desc: "Bonus action: expend superiority, pick creature within 5 feet; you have advantage on your next attack roll against that creature, and add superiority die to damage roll.",
+              page: 'PH74', source: 'class'},
+            {name: 'Two weapon fighting',
+              desc: 'When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.',
+              page: 'PH72', source: 'class'},
+            {name: 'Darkvision',
+              desc: "See 60' in dim light as bright light; in darkness as dim light. No color; only shades of gray.",
+              page: 'PH43', source: 'race'},
+            {name: 'Hellish resistance',
+              desc: "You have resistance to fire damage.",
+              page: 'PH43', source: 'race'},
+            {name: 'Wanderer', page: 'PH136', source: 'background',
+              desc: 'Remember layout of terrain. Can find food/water for me and five others if the land offers'},
+          ],
+          
+          // stuff
+          equipment: [
+            'Chainmail',
+            'Backpack',
+            'Bedroll',
+            'Mess Kit',
+            'Tinderbox',
+            {name: 'Torches', count: 10},
+            {name: 'Rations', count: 10},
+            'Waterskin',
+            "50' hemp rope",
+            "Hunting trap",
+            "Owlbear feather cloak w/ opal clasp (waterproof)",
+            "Traveler's clothes",
+          ],
+          wealth: [
+            {name: 'GP', count: 60},
+          ],
+        },
+        3: {
+          // banner
+          name: "Élin Uldas",
+          gender: '♂',
+          level: 3,
+          class: 'Sorcerer',
+          subclass: 'of Shadow', // see http://dnd5e.wikidot.com/sorcerer:shadow
+          background: 'Haunted One',
+          race: 'Tiefling',
+          alignment: 'Chaotic Good',
+          player: 'Andrew',
+          
+          portraitUrl: 'portraits/ball-bearer.png',
+          
+          // hud
+          ac: [10, 'dex|attributeBonus'],
+          speed: "30'",
+          hitPoints: [6, {expr: 'con', filters: 'attributeBonus', times: 'level'}, 'level|-1|x4'],
+          hitDiceSize: 6,
+          spellStat: 'CHA',
+          spellDC: [8, 'proficiencies.bonus', 'cha|attributeBonus'],
+          
+          // attributes
+          str: 8,
+          dex: 10,
+          con: 14,
+          int: 13,
+          wis: 13,
+          cha: 17,
+          
+          //// story
+          traits: "I refuse to become a victim, and I will not allow others to be victimized.",
+          ideals: "I have a dark calling that puts me about the law.",
+          bonds: "There's evil in me, I can feel it. It must never be set free.",
+          flaws: "I can only whisper due to attempted hanging.",
+          
+          // proficiencies
+          proficiencies: {
+            savingThrows: ['wis', 'cha'],
+            skills: ['Arcana', 'Deception', 'Intimidation', 'Survival'],
+            languages: ['Common', 'Infernal', 'Abyssal'],
+            other: ['Daggers', 'Darts', 'Slings', 'Quarterstaff', 'Light crossbow'],
+          },
+          
+          features: [
+            {name: 'Ray of Frost', source: 'cantrip', page: 'PH271',
+              refreshes: 'turn',
+              bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
+              desc: "1d8 cold damage and speed reduced by 10'; range 60'"},
+            {name: 'Fire bolt', source: 'cantrip', page: 'PH242',
+              refreshes: 'turn',
+              bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
+              desc: "1d10 fire damage; range 120'"},
+            {name: 'Mage hand', source: 'cantrip', page: 'PH256',
+              refreshes: 'turn',
+              desc: "Within 30'"},
+            {name: 'Message', source: 'cantrip', page: 'PH259',
+              refreshes: 'turn',
+              desc: "They hear you, you hear them, no one else does"},
+            {name: 'Thaumaturgy', source: 'cantrip', page: 'PH282',
+              refreshes: 'turn',
+              desc: "Show off your magical power"},
+            
+            {name: 'Spell slots',
+              usesList: [
+                {label: 1, uses: 4, refreshes: 'long rest'},
+                {label: 2, uses: 2, refreshes: 'long rest'},
+              ],
+              refreshes: 'long rest',
+              page: 'PH101', source: 'class'},
+            {name: 'Sorcery points',
+              uses: 3,
+              refreshes: 'long rest',
+              desc: "2pt ⇋ 1st level • 3pt ⇋ 2nd level",
+              descMore: " • 5pt ⇋ 3rd level • 6pts ⇋ 4th level • 7pt ⇋ 5th level",
+              page: 'PH101', source: 'class'},
+            {name: 'Quickened spell',
+              refreshes: 'long rest',
+              desc: 'Spend 2SP; cast a "1 action" spell as a bonus action',
+              page: 'PH102', source: 'class'},
+            {name: 'Twinned spell',
+              refreshes: 'long rest',
+              desc: "Spend SP equal to spell's level (1 for a cantrip); add a target",
+              page: 'PH102', source: 'class'},
+            
+            {name: 'Witch bolt',
+              refreshes: 'long rest',
+              bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
+              desc: "Hit: 1d12 (+1d12/lvl) lightning; then 1d12 lightning damage every turn you sustain",
+              level: 1, page: 'PH289', source: 'spell'},
+            {name: 'Chromatic orb',
+              refreshes: 'long rest',
+              bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
+              desc: "Hit: 3d8 (+1d8/lvl) damage of type acid, cold, fire, lightning, poison, or thunder",
+              level: 1, page: 'PH289', source: 'spell'},
+            {name: 'Magic missile',
+              refreshes: 'long rest',
+              desc: "3 (+1/lvl) darts; each does 1d4 + 1 force damage",
+              level: 1, page: 'PH257', source: 'spell'},
+            {name: 'Disguise self',
+              refreshes: 'long rest',
+              desc: "Illusion, not physical. Inspection and INT check sees through it.",
+              level: 1, page: 'PH233', source: 'spell'},
+            {name: 'Darkness',
+              refreshes: 'long rest',
+              desc: "15' sphere of darkness",
+              level: 2, page: 'PH230', source: 'spell'},
+            {name: 'Scorching ray', cheater: true,
+              refreshes: 'long rest',
+              bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
+              desc: "3 (+1/lvl) rays; 2d6 fire damage each",
+              level: 2, page: 'PH230', source: 'spell'},
+            {name: 'Web', cheater: true,
+              refreshes: 'long rest',
+              bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
+              desc: "20' cube; DEX save or restrained; STR save to break; 2d4 fire damage if burned",
+              level: 2, page: 'PH287', source: 'spell'},
+            
+            {name: 'Darkvision',
+              desc: "See 120' in dim light as bright light; in darkness as dim light. No color; only shades of gray.",
+              page: 'PH43', source: 'race/subclass'},
+            {name: 'Hellish resistance',
+              desc: "You have resistance to fire damage.",
+              page: 'PH43', source: 'race'},
+            {name: 'Heart of Darkness', page: 'HOB1', source: 'background',
+              desc: "Commoners might fear you, but will do their utmost to help you. Unless you're a danger to them, they will fight alongside you."},
+            {name: 'Strength of the Grave', page: 'X???', source: 'subclass',
+              uses: 1,
+              refreshes: 'long rest',
+              desc: "CHA saving throw; DC 5 + damage taken. Success: drop to 1HP. Can't use vs radiant or a critical hit."}
+          ],
+          
+          // stuff
+          equipment: [
+            'Light crossbow',
+            'Arcane focus',
+            'Dungeoneer pack',
+            {name: 'Dagger', count: 2},
+            'Crowbar',
+            {name: 'Hammer', count: 'Holy symbol'},
+            'Holy water',
+            'Steel mirror',
+            'Bag made of human flesh',
+          ],
+          wealth: [
+            {name: 'GP', count: 11},
+            {name: 'SP', count: 60},
+          ],
+        },
+        4: {
+          // banner
+          name: "Illithor",
+          gender: '♂',
+          level: 3,
+          class: 'Ranger',
+          subclass: 'Monster Hunter', // see http://dnd5e.wikidot.com/ranger:monster-slayer
+          background: 'Haunted One',
+          race: 'Wood Elf',
+          alignment: 'Chaotic Good',
+          player: 'Morgan',
+          
+          portraitUrl: 'portraits/haunted.png',
+          
+          // hud
+          ac: [{expr: 14, source: 'Scale mail'}, 'dex|attributeBonus|max2'],
+          speed: "35'",
+          hitPoints: [10, {expr: 'con', filters: 'attributeBonus', times: 'level'}, 'level|-1|x6'],
+          hitDiceSize: 10,
+          spellStat: 'WIS',
+          spellDC: [8, 'proficiencies.bonus', 'wis|attributeBonus'],
+          
+          // attributes
+          str: 12,
+          dex: 17,
+          con: 13,
+          int: 8,
+          wis: 15,
+          cha: 10,
+          
+          //// story
+          traits: "I live for the hunt.",
+          ideals: "I kill monsters to make the world a safer place.",
+          bonds: "I would sacrifice my life to protect the innocent.",
+          flaws: "I feel no compassion for the dead. They're the lucky ones.",
+          
+          // proficiencies
+          proficiencies: {
+            savingThrows: ['str', 'dex'],
+            skills: ['Athletics', 'Deception', 'Insight', 'Perception', 'Stealth', 'Survival'],
+            languages: ['Common', 'Elvish', 'Dragonborn', 'Primordial'],
+            other: ['Longsword', 'Shortsword', 'Shortbow', 'Longbow', 'Light armor', 'Medium armor', 'Shields', 'Simple weapons', 'Martial weapons'],
+          },
+          
+          features: [
+            {name: 'Longbow', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['dex|attributeBonus', 'proficiencies.bonus', {expr: 2, source: 'Fighting style'}],
+              desc: "1d8+DEX P"},
+            {name: 'Shortsword', source: 'weapon', page: 'PH149',
+              refreshes: 'turn',
+              bonus: ['dex|attributeBonus', 'proficiencies.bonus'],
+              desc: "1d6+DEX"},
+            
+            {name: 'Favored enemy: Undead',
+              desc: "Advantage to track or recall.",
+              page: 'PH91', source: 'class'},
+            {name: 'Natural explorer: Forest',
+              desc: "Double proficiency on related WIS/INT skill checks.",
+              page: 'PH91', source: 'race'},
+            {name: 'Fighting style: Archery',
+              desc: "+2 with ranged weapons",
+              page: 'PH91', source: 'race'},
+            {name: 'Primeval Awareness',
+              desc: "Talk with beasts; sense favored enemies",
+              page: 'PH91', source: 'race'},
+            {name: "Slayer's Prey",
+              desc: "Bonus action: target; extra 1d6 damage on each hit",
+              page: 'X???', source: 'race'}, 
+            {name: "Hunter's Sense",
+              uses: ['wis|attributeBonus|min1'],
+              refreshes: 'long rest',
+              desc: "Action: sense immunities, resistances, and vulnerabilities",
+              page: 'X???', source: 'race'},
+          
+            {name: 'Spell slots',
+              usesList: [
+                {label: 1, uses: 3, refreshes: 'long rest'},
+              ],
+              refreshes: 'long rest',
+              page: 'PH91', source: 'class'},
+            {name: 'Protection from Evil and Good',
+              refreshes: 'long rest',
+              desc: "Protect one willing creature you touch from baddies. Attacks have disadvantage; can't be charmed, frightened, or possessed",
+              level: 1, page: 'PH91', source: 'class'},
+            {name: 'Snare',
+              refreshes: 'long rest',
+              desc: "INT save to see trap; DEX save to avoid being restrained; DEX save with disadvantage to escape",
+              level: 1, page: 'X???', source: 'class'},
+            {name: 'Zephyr strike',
+              refreshes: 'long rest',
+              desc: "Bonus action: for 1 minute, first attack per turn has advantage, and you move (+30' speed) without provoking opportunity attacks",
+              level: 1, page: 'PH???', source: 'class'},
+            {name: '???',
+              refreshes: 'long rest',
+              desc: "???",
+              level: 1, page: 'PH???', source: 'class'},
+            
+            {name: 'Darkvision',
+              desc: "See 60' in dim light as bright light; in darkness as dim light. No color; only shades of gray.",
+              page: 'PH23', source: 'race'},
+            {name: 'Fey Ancestry',
+              desc: "Advantage against being charmed; magic can't put you to sleep.",
+              page: 'PH23', source: 'race'},
+          ],
+          
+          // stuff
+          equipment: [
+            'Scale mail',
+            {name: 'Shortsword', count: 2},
+            "Explorer's pack",
+            {name: 'Arrows', count: 20},
+            "Monster hunter's pack",
+          ],
+          wealth: [
+            {name: "GP", count: 30},
+          ],
+        }
+      };
+    </script>
+    
+    <script>
+      document.addEventListener("DOMContentLoaded", function(event) {
+        Vue.filter('bonus', function(bonus) {
+          return bonus >= 0 ? `+${bonus}` : `${bonus}`;
+        });
+        
+        Vue.filter('attributeBonus', function(attribute) {
+          return Math.floor((attribute - 10) / 2);
+        });
+        
+        Vue.filter('dig', function(path, context) {
+          if (!path.split) { return path; }
+          return path.split('.').reduce((ctx, step) => ctx[step], context);
+        });
+        
+        Vue.filter('metafilter', function(value, filters) {
+          filters = filters || [];
+          filters = filters.split ? filters.split(/\s*\|\s*/) : filters;
+          return filters.reduce((v, f) => {
+            if (m = f.match(/^x(\d+(.\d+)?)$/)) {
+              return (v * parseFloat(m[1]))
+            } else if (m = f.match(/^-(\d+(.\d+)?)$/)) {
+              return (v - parseFloat(m[1]))
+            } else if (m = f.match(/^\+(\d+(.\d+)?)$/)) {
+              return (v + parseFloat(m[1]))
+            } else if (m = f.match(/^min(\d+)$/)) {
+              return Math.max(v, parseInt(m[1]));
+            } else if (m = f.match(/^max(\d+)$/)) {
+              return Math.min(v, parseInt(m[1]));
+            } else {
+              return Vue.filter(f)(v);
+            }
+          }, value);
+        });
+        
+        Vue.filter('eval', function(parts, context) {
+          if (!parts || parts.length === 0) { return 0 }
+          if (typeof(parts) === 'number') { return parts }
+          if (typeof(parts) === 'string') { parts = [parts] }
+          
+          var dig = Vue.filter('dig');
+          var metafilter = Vue.filter('metafilter');
+          var eval = Vue.filter('eval');
+          
+          var [thisPart, ...rest] = parts;
+          if (typeof(thisPart) === 'number') {
+            thisPart = {expr: thisPart}
+          } else if (thisPart.split) {
+            var bits = thisPart.split('|');
+            thisPart = {
+              expr: bits.splice(0, 1)[0],
+              filters: bits,
+            };
+          }
+          
+          var expr = thisPart.expr || thisPart;
+          var filters = thisPart.filters || [];
+          var times = eval(thisPart.times || 1, context);
+          
+          var value = dig(expr, context);
+          var filtered = metafilter(value, filters);
+          if (expr === 'con' && filtered === 2) { debugger }
+          var timed = times === 1 ? filtered : filtered * times;
+          
+          console.log({ret: timed, thisPart, expr, filters, times, value, filtered, timed});
+          return timed + eval(rest, context);
+        });
+
+        
+        let xcharacterDefaults = {
+          name: 'Bilbo Baggins',
+          gender: '⚥',
+          level: 1,
+          class: '',
+          background: '',
+          race: '',
+          alignment: '',
+          player: '',
+          
+          portraitUrl: null,
+          
+          spellStat: null,
+          spellDC: null,
+          initiative: ['dex|attributeBonus'],
+          hitDiceSize: 4,
+          hitPoints: 1,
+          
+          str: 10,
+          dex: 10,
+          con: 10,
+          int: 10,
+          wis: 10,
+          cha: 10,
+          
+          features: [],
+          equipment: [],
+          wealth: [],
+          proficiencies: {
+            savingThrows: [],
+            skills: [],
+          },
+          
+          traits: '',
+          ideals: '',
+          bonds: '',
+          flaws: '',
+        };
+        
+        var c = Object.keys(theCharacters).map((id) => {
+          var thisC = theCharacters[id];
+          extend({}, xcharacterDefaults, thisC);
+          extend(thisC.proficiencies, {bonus: 2}, thisC.proficiencies);
+          return thisC;
+        });
+        
+        Vue.component('desc-list', {
+          props: {
+            values: Object,
+            classPrefix: String,
+            classFor: {
+              type: Function,
+              default: function(k, v) {return `${this.classPrefix}---${k}`}
+            }
+          },
+          template:
+            `<dl>
+              <template v-for='(value, key) in values' v-if='value !== null'>
+                <dt :class='classFor(key, value)'>{{key}}</dt>
+                <dd :class='classFor(key, value)'>{{value}}</dd>
+              </template>
+            </dl>`
+        });
+        
+        AttributeList = Vue.component('attribute-list', {
+          props: ['values', 'proficiencies'],
+          data: function() { return {
+            skillsByAttribute: {
+              str: ['Athletics'],
+              dex: ['Acrobatics', 'Sleight of Hand', 'Stealth'],
+              con: [],
+              int: ['Arcana', 'History', 'Investigation', 'Nature', 'Religion'],
+              wis: ['Animal Handling', 'Insight', 'Medicine', 'Perception', 'Survival'],
+              cha: ['Deception', 'Intimidation', 'Performance', 'Persuasion'],
+            }
+          }},
+          methods: {
+            attributeBonus(attribute) {
+              return Math.floor((this.values[attribute] - 10) / 2);
+            },
+            proficientInSaving(attribute) {
+              return this.proficiencies.savingThrows.includes(attribute);
+            },
+            savingBonus(attribute) {
+              return this.attributeBonus(attribute) +
+                (this.proficientInSaving(attribute) ? this.proficiencies.bonus : (this.proficiencies.defaultSaveBonus || 0));
+            },
+            proficientInSkill(skill) {
+              return this.proficiencies.skills.includes(skill);
+            },
+            expertiseInSkill(skill) {
+              return (this.proficiencies.expertise || []).includes(skill);
+            },
+            skillBonus(attribute, skill) {
+              return this.attributeBonus(attribute) +
+                (this.proficientInSkill(skill) ? this.proficiencies.bonus : Vue.filter('eval')(this.proficiencies.defaultSkillBonus || 0, this)) +
+                (this.expertiseInSkill(skill) ? this.proficiencies.bonus : 0);
+            },
+          },
+          template:
+            `<div class='character-sheet--attributes'>
+              <div v-for='(value, attribute) in values' v-if='value !== null'
+              class='character-sheet--attribute'
+              :class='"character-sheet--attribute---" + attribute'>
+                <header>{{attribute.toUpperCase()}}</header>
+                <span class='rating'>
+                  <span class='value'>{{value}}</span>
+                  <span class='bonus'>{{attributeBonus(attribute) | bonus}}</span>
+                </span>
+                <div class='proficiencies'>
+                  <div class='savings-throw' :class='{proficient: proficientInSaving(attribute)}'>Savings throws
+                    {{savingBonus(attribute) | bonus}}
+                  </div>
+                  <div v-for='(skill) in skillsByAttribute[attribute]'
+                    :class='{
+                      proficient: proficientInSkill(skill),
+                      expertise: expertiseInSkill(skill)}'
+                    class='proficiencies skill'>{{skill}}
+                    {{skillBonus(attribute, skill) | bonus}}
+                  </div>
+                </div>
+              </div>
+            </div>`
+        });
+        
+        Vue.component('uses-ticks', {
+          props: ['on'],
+          computed: {
+            evalUses: function() {
+              var k = Vue.filter('eval')(this.on.uses, this.$parent.$data);
+              console.log({u: this.on.uses, k})
+              return k;
+            }
+          },
+          template:
+            `<div>
+              <span v-if='on.label'>{{on.label}}: </span>
+              <input type='checkbox' v-for='i in evalUses'/>
+              <span v-if='on.refreshes' 
+            class='character-sheet--uses---refreshes'>{{on.refreshes}}</span>
+            </div>`
+        });
+        
+        const CharacterList = {
+          data: function () { return {
+            characters: theCharacters,
+          } },
+          computed: {
+            numCharacters: function() {
+              return Object.keys(this.characters).length
+            },
+          },
+          template:
+            `<section class='character-list'>
+              <h1>CDistiller 5E</h1>
+              <ol>
+                <li v-for='(c, id) in characters'>
+                  <router-link :to="'/c/' + id">{{c.name}}</router-link>
+                </li>
+              </ol>
+              <p>{{numCharacters}} character{{numCharacters === 1 ? '' : 's'}}</p>
+            </section>`
+        };
+        
+        const characterDefaults = {
+          name: 'Bilbo Baggins',
+          gender: '⚥',
+          level: 1,
+          class: '',
+          background: '',
+          race: '',
+          alignment: '',
+          player: '',
+          
+          portraitUrl: null,
+          
+          spellStat: null,
+          spellDC: null,
+          initiative: ['dex|attributeBonus'],
+          hitDiceSize: 4,
+          hitPoints: 1,
+          
+          str: 10,
+          dex: 10,
+          con: 10,
+          int: 10,
+          wis: 10,
+          cha: 10,
+          
+          features: [],
+          equipment: [],
+          wealth: [],
+          proficiencies: {
+            savingThrows: [],
+            skills: [],
+          },
+          
+          traits: '',
+          ideals: '',
+          bonds: '',
+          flaws: '',
+        };
+        const Character = {
+          props: ['id'],
+          data: function () {
+            var char = theCharacters[this.id] || {};
+            char = extend({
+              passivePerception: char.wis, // TODO make into a bonus, not a stat value
+              proficiencies: {},
+              hitPointsLost: 0,
+              hitDiceCurrent: char.hitDiceMax || char.level,
+              hitDiceMax: char.level,
+            }, characterDefaults, char);
+            extend(char.proficiencies, {bonus: 2}, char.proficiencies); // TODO replace 2
+            
+            return char;
+          },
+          methods: {
+            bannerStats() {
+              with(this) { return {
+                class: `${this.class} ${this.subclass ? `/ ${subclass}` : ''}`,
+                level, background, race, alignment, player} }
+            },
+            attributeStats() {
+              with(this) { return {str, dex, con, int, wis, cha} }
+            },
+            storyStats() {
+              with(this) { return {
+                'Personality traits': traits,
+                'Ideals': ideals,
+                'Bonds': bonds,
+                'Flaws': flaws,
+              } }
+            },
+          },
+          template:
+            `<section class='character-sheet character-sheet---5e'>
+              <img v-if='portraitUrl' :src='portraitUrl' class='character-sheet--portrait' />
+              <header class='character-sheet--banner'>
+                <h1><span class='character-sheet--name'>{{name}}</span><span class='character-sheet--gender'>{{gender}}</span></h1>
+                <desc-list
+                  class='key-value-pairs'
+                  :values='bannerStats()'
+                  classPrefix='character-sheet--banner-stat'></desc-list>
+              </header>
+              <section class='character-sheet--hud key-value-pairs'>
+                <div class='character-sheet--hud-element'>
+                  <header>Inspiration</header>
+                  <span class='value'><input type='checkbox'/></span>
+                </div>
+                <div v-if='$data.ac' class='character-sheet--hud-element'>
+                  <header>AC</header>
+                  <span class='value'>{{ac | eval($data)}}</span>
+                </div>
+                <div v-if='$data.initiative' class='character-sheet--hud-element'>
+                  <header>Initiative</header>
+                  <span class='value'>{{initiative | eval(this) | bonus}}</span>
+                </div>
+                <div v-if='$data.passivePerception' class='character-sheet--hud-element'>
+                  <header>Passive Perception</header>
+                  <span class='value'>{{passivePerception | attributeBonus | bonus}}</span>
+                </div>
+                <div v-if='$data.speed' class='character-sheet--hud-element'>
+                  <header>Speed</header>
+                  <span class='value'>{{speed}}</span>
+                </div>
+                <div v-if='$data.proficiencies' class='character-sheet--hud-element'>
+                  <header>Proficiency bonus</header>
+                  <span class='value'>{{proficiencies.bonus | bonus}}</span>
+                </div>
+                <div v-if='$data.spellStat' class='character-sheet--hud-element'>
+                  <header>Spell stat</header>
+                  <span class='value'>{{spellStat}}</span>
+                </div>
+                <div v-if='$data.spellDC' class='character-sheet--hud-element'>
+                  <header>Spell DC</header>
+                  <span class='value'>{{spellDC | eval($data)}}</span>
+                </div>
+                <div v-if='$data.maneuverDC' class='character-sheet--hud-element'>
+                  <header v-if='maneuverDC'>Maneuver DC</header>
+                  <span class='value' v-if='maneuverDC'>{{maneuverDC | eval($data)}}</span>
+                </div>
+                <div class='character-sheet--hud-element character-sheet--hit-dice'>
+                  <header>Hit dice</header>
+                  <span class='value'>
+                    <span class='character-sheet--hit-dice---current'
+                      v-if='hitDiceCurrent !== hitDiceMax'>{{hitDiceCurrent}}/</span><span 
+                      class='character-sheet--hit-dice---max'>{{hitDiceMax || level}}</span><span 
+                      class='character-sheet--hit-dice---size'>d{{hitDiceSize}}</span>
+                  </span>
+                </div>
+                <div class='character-sheet--hud-element character-sheet--hp'>
+                  <header>HP</header>
+                  <span class='value'>
+                    <span class='character-sheet--hp---current'
+                      v-if='hitPointsLost > 0'>{{hitPoints - hitPointsLost | eval($data)}}/</span>
+                    <span class='character-sheet--hp---max'>{{hitPoints | eval($data)}}</span>
+                    <span class='character-sheet--hp---temp'
+                      v-if='$data.hitPointsTemporary && hitPointsTemporary > 0'>+{{hitPointsTemporary}}/</span>
+                  </span>
+                </div>
+              </section>
+              
+              <attribute-list
+                :values='attributeStats()'
+                :proficiencies='proficiencies'></attribute-list>
+              <ul class='character-sheet--features'>
+                <li v-for='feature in features'
+                class='character-sheet--feature'
+                :class='(feature.refreshes ? "character-sheet--feature---refreshes-every-" + String(feature.refreshes).replace(/[^a-z]+/g, "-") : "") + " " + (feature.cheater ? "character-sheet--feature---cheater" : "")'>
+                  <header>
+                    <span v-if='feature.bonus' class='character-sheet--feature---bonus'>{{feature.bonus | eval($data) | bonus}}</span>
+                    <span class='character-sheet--feature---name'>{{feature.name}}</span>
+                    <span v-if='feature.save' class='character-sheet--feature---save'>{{feature.save}}</span>
+                    <span v-if='feature.subname' class='character-sheet--feature---subname'>{{feature.subname}}</span>
+                  </header>
+                  <uses-ticks v-if='feature.uses' class='character-sheet--feature-uses' :on='feature'></uses-ticks>
+                  <uses-ticks v-for='use in feature.usesList' class='character-sheet--feature-uses' :on='use'></uses-ticks>
+                  <div v-if='feature.desc' class='character-sheet--feature---description'>{{feature.desc}}</div>
+                  <div class='character-sheet--feature---origin'>
+                    <span v-if='feature.level' class='character-sheet--feature---level'>{{feature.level}}</span>
+                    <span v-if='feature.source' class='character-sheet--feature---source'>{{feature.source}}</span>
+                    <span v-if='feature.page' class='character-sheet--feature---page'>{{feature.page}}</span>
+                  </div>
+                </li>
+                <li class='character-sheet--feature' v-if='proficiencies.other'>
+                  <header>Proficiencies</header>
+                  <span class='character-sheet--feature---description'>{{proficiencies.other.join(", ")}}</span>
+                </li>
+                <li class='character-sheet--feature' v-if='proficiencies.languages'>
+                  <header>Language proficiencies</header>
+                  <span class='character-sheet--feature---description'>{{proficiencies.languages.join(", ")}}</span>
+                  <div class="character-sheet--feature---origin">
+                    <span class="character-sheet--feature---page">PH123</span>
+                  </div>
+                </li>
+                <li class='character-sheet--feature'>
+                  <header>Death saves</header>
+                  <dl class='character-death character-sheet--feature---description'>
+                    <dt>Successes</dt><dd><input type='checkbox'/><input type='checkbox'/><input type='checkbox'/></dd>
+                    <dt>Failures</dt><dd><input type='checkbox'/><input type='checkbox'/><input type='checkbox'/></dd>
+                  </dl>
+                  <div class="character-sheet--feature---origin">
+                    <span class="character-sheet--feature---page">PH197</span>
+                  </div>
+                </li>
+                <li class='character-sheet--feature character-sheet--feature---loot'>
+                  <header>Equipment</header>
+                  <ul class='character-sheet--equipment-list'>
+                    <template v-for='item in equipment'>
+                      <li v-if='!item.name' class='character-sheet--equipment'>{{item}}</li>
+                      <li v-if='item.name' class='character-sheet--equipment'>
+                        <strong>{{item.name}}</strong>
+                        <span v-if='item.desc' class='character-sheet--equipment---description'>{{item.desc}}</span>
+                        <span v-if='item.count' class='character-sheet--equipment---count'>x{{item.count}}</span>
+                      </li>
+                    </template>
+                  </ul>
+                  
+                  <header>Wealth</header>
+                  <ul class='character-sheet--wealth character-sheet--feature---description'>
+                    <template v-for='item in wealth'>
+                      <li v-if='item.name' class='character-sheet--wealth---type'>
+                        <strong>{{item.name}}</strong>
+                        <span v-if='item.desc' class='character-sheet--wealth---description'>{{item.desc}}</span>
+                        <span v-if='item.count' class='character-sheet--wealth---count'>x{{item.count}}</span>
+                      </li>
+                    </template>
+                  </ul>
+                </li>
+                <li v-for='(element, name) in storyStats()' class='character-sheet--feature character-sheet--feature---story'>
+                  <header>{{name}}</header>
+                  <span class='character-sheet--feature---description'>{{element}}</span>
+                </li>
+              </ul>
+            </section>`
+        };
+        const Party = {
+          props: ['id'],
+          data: function () {
+            return {
+              members: theParties[this.id],
+            }
+          },
+          template:
+            `<section class='party'>
+              <distilled-character v-for='cId in members' :id='cId'></distilled-character>
+            </section>`
+        };
+        
+        Vue.component('distilled-character', Character);
+        const router = new VueRouter({
+          routes: [
+            { name: 'character-list', path: '/', component: CharacterList },
+            { name: 'character', path: '/c/:id', component: Character, props: true },
+            { name: 'party', path: '/p/:id', component: Party, props: true },
+          ]
+        })
+        
+        app = new Vue({
+          router,
+          el: '#app',
+        });
+      });
+    </script>
+  </body>
+</html>
