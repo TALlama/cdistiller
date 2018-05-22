@@ -196,9 +196,6 @@ input[type='checkbox']:checked {
     padding-top: .3em;
     padding-bottom: .3em;
   }
-  .character-sheet--feature---cheater {
-    opacity: .3;
-  }
   .character-sheet--feature---refreshes-every-turn {
     --border-color: green;
   }
