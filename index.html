@@ -24,7 +24,7 @@
           // banner
           name: "Mira Dragomir",
           gender: '♀',
-          level: 3,
+          level: 4,
           class: 'Bard',
           subclass: 'of Lore',
           background: 'Spy',
@@ -44,11 +44,11 @@
           
           // attributes
           str: 8,
-          dex: 15,
+          dex: 16,
           con: 10,
           int: 12,
           wis: 14,
-          cha: 17,
+          cha: 18,
           
           ////// story
           traits: "Always calm, no matter the situation. I never raise my voice ar let my emotions control me",
@@ -70,7 +70,11 @@
             {name: 'Vicious mockery', source: 'cantrip', page: 'PH285',
               refreshes: 'turn',
               save: 'WIS',
-              desc: "…or take 1d4 damage and have disadvantage on next attack"},
+              desc: "…or take 1d4 psychic damage and have disadvantage on next attack"},
+            {name: 'Thunderclap', source: 'cantrip', page: 'PH285',
+              refreshes: 'turn',
+              save: 'CON',
+              desc: "…or take 1d6 thunder damage if within 5'"},
             {name: 'Minor illusion', source: 'cantrip', page: 'PH260',
               refreshes: 'turn',
               desc: "Image or sound, not both. Action and INT save shows it to be an illusion"},
@@ -82,71 +86,71 @@
             {name: 'Bardic inspiration',
               uses: ['cha|attributeBonus|min1'],
               refreshes: 'long rest',
-              desc: 'Bonus action: give a d6. Holder can add it to an attack, ability, or saving roll, after initial roll.',
+              desc: '⚡︎ Bonus action: give a d6. Add to attack, ability, or saving roll, after initial roll.',
               page: 'PH91', source: 'class'},
-            {name: 'Bard spells',
+            {name: 'Spell slots',
               usesList: [
                 {label: 1, uses: 4, refreshes: 'long rest'},
-                {label: 2, uses: 2, refreshes: 'long rest'},
+                {label: 2, uses: 3, refreshes: 'long rest'},
               ],
               refreshes: 'long rest',
               page: 'PH91', source: 'class'},
             
             // Spell list
             // 
-            // Animal Friendship (1; PH212) charm 1 (+1/lvl); max INT 4
+            // 👎 Animal Friendship (1; PH212) charm 1 (+1/lvl); max INT 4
             // Animal Messenger (2; PH212) send message
             // Bane (1; PH216) 3 targets: -1d4 to hit or save
-            // Blade Ward (c; PH218) 1 round resistance for me
+            // 👎 Blade Ward (c; PH218) 1 round resistance for me
             // Blindness/Deafness (2; PHx) until CON save
             // Calm Emotions (2; PH221) no frightening OR don't attack us
             // 🚫 Charm Person (1; PH221) WIS save or charmed, but it knows
             // Cloud of Daggers (2; PH222) 4d4 area
-            // Comprehend Languages (1; PH224) hear or read (w touch)
+            // ✅ Comprehend Languages (1; PH224) hear or read (w touch)
             // Crown of Madness (2; PH229) attack for me (eats my actions)
-            // ✴️ Cure Wounds (1; PH230) touch heal Sd8
-            // Dancing Lights (c; PH230) light
+            // ✅ Cure Wounds (1; PH230) touch heal Sd8
+            // 👎 Dancing Lights (c; PH230) light
             // Detect Magic (1; PH231) see magic auras for 10m
             // Detect Thoughts (2; PH231) surface free, deep: INT & aware
-            // Disguise Self (1; PH233) illusionary
-            // Dissonant Whispers (1; PH234) damage & flee
+            // ✅ Disguise Self (1; PH233) illusionary
+            // ✅ Dissonant Whispers (1; PH234) damage & flee
             // Enhance Ability (2; PH237) give adv on ability checks
             // Enthrall (2; PH238) "look at me!"
             // Faerie Fire (1; PH239) adv to hit lit peeps
-            // Feather Fall (1; PH239) don't die
+            // 👎 Feather Fall (1; PH239) don't die
             // 🚫 Friends (c; PH244) adv on CHA, but then they know
-            // Healing Word (1; PH250) ranged heal 1d10
+            // 👎 Healing Word (1; PH250) ranged heal 1d4
             // Heat Metal (2; PH250) continuing damage via metal
-            // Heroism (1; PH250) no fear; temp hp per turn
+            // ✅ Heroism (1; PH250) no fear; temp hp per turn
             // Hold Person (2; PH251) WIS or paralyzed
             // Identify (1; PH252) what magic does this have?
             // Illusory Script (1; PH252) write so only those I want can read
             // Invisibility (2; PH254) make 1 (+1/lvl) invis
             // Knock (2; PH254) open stuff
-            // Lesser Restoration (2; PH255) end condition or disease
-            // Light (c; PH255) make light
-            // Locate Animais or Plants (2; PHx) yep
-            // Locate Object (2; PHx) yep
-            // Longstrider (1; PHx) +10' movement
+            // 👎 Lesser Restoration (2; PH255) end condition or disease
+            // 👎 Light (c; PH255) make light
+            // 👎 Locate Animais or Plants (2; PHx) yep
+            // 👎 Locate Object (2; PHx) yep
+            // 👎 Longstrider (1; PHx) +10' movement
             // Mage Hand (c; PHx) hand does your bidding
             // Magic Mouth (2; PHx) mouth says your message
             // Mending (c; PH259) fix a hole
             // Message (c; PH259) TP, close up
-            // Minor IlIusion (c; PH260) sound or image, INT reveals
+            // ✅ Minor IlIusion (c; PH260) sound or image, INT reveals
             // Phantasmal Force (2; PH264) realistic, for 1 target
-            // Prestidigitation (c; PH267) light show
+            // 👎 Prestidigitation (c; PH267) light show
             // See Invisibility (2; PHx) 
             // Shatter (2; PHx) 3d8 thunder dmg
-            // Silence (2; PHx) quiet
+            // 👎 Silence (2; PHx) quiet
             // Silent Image (1; PH276) sight not sound
             // Sleep (1; PH276) group zzz, lowest HP first
-            // Speak with Animais (1; PHx) 
-            // Suggestion (2; PHx) 
+            // 👎 Speak with Animais (1; PHx) 
+            // ✅ Suggestion (2; PHx) 
             // Tasha's Hideous Laughter (1; PHx) incapacitate until WIS
             // Thunderwave (1; PHx) CON or 2d8+push
-            // True Strike (c; PHx) adv on next attack
+            // 👎 True Strike (c; PHx) adv on next attack
             // Unseen Servant (1; PHx) 
-            // Vicious Mockery (c; PHx) 
+            // ✅ Vicious Mockery (c; PHx) 
             // 🚫 Zone of Truth (2; PHx) they know, I know
             {name: 'Disguise self',
               refreshes: 'long rest',
@@ -158,16 +162,21 @@
               level: 1, page: 'PH224', source: 'class'},
             {name: 'Cure wounds',
               refreshes: 'long rest',
-              desc: "Touch; Heal 1d8+CHA (+1d8/level)",
+              desc: "Touch; Heal 1d8+CHA (+1d8/lvl)",
               level: 1, page: 'PH230', source: 'class'},
             {name: 'Heroism',
               refreshes: 'long rest',
-              desc: "1 (+1/level) target. Immune to frightening; CHA temp HP at start of each turn",
+              desc: "1 (+1/lvl) target. Immune to frightening; CHA temp HP at start of each turn",
               level: 1, page: 'PH250', source: 'class'},
+            {name: 'Bane',
+              refreshes: 'long rest',
+              save: 'CHA',
+              desc: "…or -1d4 to attack rolls and saving throws for 3 targets",
+              level: 1, page: 'PH216', source: 'class'},
             {name: 'Dissonant whispers',
               refreshes: 'long rest',
               save: 'WIS',
-              desc: "…or 3d6 (+1d6/level) psychic damage and use reaction to flee. Half dmg on save",
+              desc: "…or 3d6 (+1d6/lvl) psychic damage and use reaction to flee. Half dmg on save",
               level: 1, page: 'PH234', source: 'class'},
             {name: 'Suggestion',
               refreshes: 'long rest',
@@ -661,58 +670,10 @@
           
           var value = dig(expr, context);
           var filtered = metafilter(value, filters);
-          if (expr === 'con' && filtered === 2) { debugger }
           var timed = times === 1 ? filtered : filtered * times;
           
           console.log({ret: timed, thisPart, expr, filters, times, value, filtered, timed});
           return timed + eval(rest, context);
-        });
-
-        
-        let xcharacterDefaults = {
-          name: 'Bilbo Baggins',
-          gender: '⚥',
-          level: 1,
-          class: '',
-          background: '',
-          race: '',
-          alignment: '',
-          player: '',
-          
-          portraitUrl: null,
-          
-          spellStat: null,
-          spellDC: null,
-          initiative: ['dex|attributeBonus'],
-          hitDiceSize: 4,
-          hitPoints: 1,
-          
-          str: 10,
-          dex: 10,
-          con: 10,
-          int: 10,
-          wis: 10,
-          cha: 10,
-          
-          features: [],
-          equipment: [],
-          wealth: [],
-          proficiencies: {
-            savingThrows: [],
-            skills: [],
-          },
-          
-          traits: '',
-          ideals: '',
-          bonds: '',
-          flaws: '',
-        };
-        
-        var c = Object.keys(theCharacters).map((id) => {
-          var thisC = theCharacters[id];
-          extend({}, xcharacterDefaults, thisC);
-          extend(thisC.proficiencies, {bonus: 2}, thisC.proficiencies);
-          return thisC;
         });
         
         Vue.component('desc-list', {
