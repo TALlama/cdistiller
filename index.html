@@ -63,7 +63,7 @@
             skills: ['Acrobatics', 'Sleight of hand', 'Stealth', 'History', 'Investigation', 'Insight', 'Perception', 'Deception', 'Performance', 'Persuasion'],
             expertise: ['Deception', 'Persuasion'],
             languages: ['Common', 'Elvish', 'Sylvan'],
-            other: ['Light armor', 'Simple weapons', 'Hand crossbows', 'Longswords', 'Rapiers', 'Shortswords', 'Fiddles', 'Pipe organs', 'Harpsichords'],
+            other: ['Light armor', 'Simple weapons', 'Hand crossbows', 'Longswords', 'Shortswords', 'Rapiers', 'Fiddles', 'Organs', 'Flutes'],
           },
           
           features: [
@@ -173,10 +173,10 @@
               save: 'CHA',
               desc: "…or -1d4 to attack rolls and saving throws for 3 targets",
               level: 1, page: 'PH216', source: 'class'},
-            {name: 'Dissonant whispers',
+            {name: 'Whispers',
               refreshes: 'long rest',
               save: 'WIS',
-              desc: "…or 3d6 (+1d6/lvl) psychic damage and use reaction to flee. Half dmg on save",
+              desc: "…or 3d6 (+1d6/lvl) psychic damage and use reaction to flee. Save: half dmg",
               level: 1, page: 'PH234', source: 'class'},
             {name: 'Suggestion',
               refreshes: 'long rest',
@@ -199,7 +199,7 @@
               page: 'PH23', source: 'race'},
             
             {name: 'Underground contact',
-              desc: "Reliable and trustworthy; liaison to network. Can get messages to & from over great distances",
+              desc: "Reliable liaison to network. Can get messages to & from over great distances",
               page: 'PH129', source: 'background'},
           ],
           
@@ -343,7 +343,7 @@
           // banner
           name: "Élin Uldas",
           gender: '♂',
-          level: 3,
+          level: 4,
           class: 'Sorcerer',
           subclass: 'of Shadow', // see http://dnd5e.wikidot.com/sorcerer:shadow
           background: 'Haunted One',
@@ -365,9 +365,9 @@
           str: 8,
           dex: 10,
           con: 14,
-          int: 13,
+          int: 14,
           wis: 13,
-          cha: 17,
+          cha: 18,
           
           //// story
           traits: "I refuse to become a victim, and I will not allow others to be victimized.",
@@ -401,6 +401,10 @@
             {name: 'Thaumaturgy', source: 'cantrip', page: 'PH282',
               refreshes: 'turn',
               desc: "Show off your magical power"},
+            {name: 'Poison Spray', source: 'cantrip', page: 'PH266',
+              save: 'CON',
+              refreshes: 'turn',
+              desc: "…or take 1d12 poison damage"},
             
             {name: 'Spell slots',
               usesList: [
@@ -451,11 +455,16 @@
               bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
               desc: "3 (+1/lvl) rays; 2d6 fire damage each",
               level: 2, page: 'PH230', source: 'spell'},
-            {name: 'Web',
+            {name: 'Shatter',
               refreshes: 'long rest',
-              bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
-              desc: "20' cube; DEX save or restrained; STR save to break; 2d4 fire damage if burned",
-              level: 2, page: 'PH287', source: 'spell'},
+              save: 'CON',
+              desc: "Fail: 3d8 (+1d8/lvl) thunder damage for all in 10' sphere. Success: ½ damage. Inorganics have disadvantage",
+              level: 2, page: 'PH275', source: 'spell'},
+            //{name: 'Web',
+            //  refreshes: 'long rest',
+            //  bonus: ['cha|attributeBonus', 'proficiencies.bonus'],
+            //  desc: "20' cube; DEX save or restrained; STR save to break; 2d4 fire damage if burned",
+            //  level: 2, page: 'PH287', source: 'spell'},
             
             {name: 'Darkvision',
               desc: "See 120' in dim light as bright light; in darkness as dim light. No color; only shades of gray.",
@@ -939,7 +948,7 @@
               <ul class='character-sheet--features'>
                 <li v-for='feature in features'
                 class='character-sheet--feature'
-                :class='(feature.refreshes ? "character-sheet--feature---refreshes-every-" + String(feature.refreshes).replace(/[^a-z]+/g, "-") : "") + " " + (feature.cheater ? "character-sheet--feature---cheater" : "")'>
+                :class='(feature.refreshes ? "character-sheet--feature---refreshes-every-" + String(feature.refreshes).replace(/[^a-z]+/g, "-") : "")'>
                   <header>
                     <span v-if='feature.bonus' class='character-sheet--feature---bonus'>{{feature.bonus | eval($data) | bonus}}</span>
                     <span class='character-sheet--feature---name'>{{feature.name}}</span>
